@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "allowUnusedLabels": true,
+        "noImplicitReturns": true,
+        "noImplicitAny": false,
+        "strictPropertyInitialization": false,
+        "target": "es5",
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
