@@ -2,6 +2,8 @@
 
 A space shooter built in [Phaser 3](https://phaser.io/phaser3) with [Typescript](https://www.typescriptlang.org) and [Parcel](https://parceljs.org) 🤯
 
+## [Play the game!](https://kokodoko.github.io/ruimtegruis/)
+
 ![ruimtegruis](ruimtegruis.png)
 
 ## Preparing
