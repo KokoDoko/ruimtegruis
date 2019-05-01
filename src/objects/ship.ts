@@ -12,19 +12,15 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     constructor(scene: GameScene) {
         super(scene, 100,450, "ship")    
         this.gameScene = scene
+        
         this.addParticles()
-
         this.setScale(0.7)
         this.scene.add.existing(this)
         this.addPhysics()
-
-        this.cursors = this.scene.input.keyboard.createCursorKeys()
-
         
+        this.cursors = this.scene.input.keyboard.createCursorKeys()
     }
 
-    
-    
     private addPhysics(){
         this.scene.physics.add.existing(this);
         this.setSize(this.displayWidth, this.displayHeight) 
@@ -37,15 +33,15 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
 
     
     private addParticles() {
-        let particles = this.scene.add.particles('pixel')
+        let sparks = this.scene.add.particles('pixel')
 
-        let emitter = particles.createEmitter({
+        let emitter = sparks.createEmitter({
             speed: -100,
             gravityX: -300, 
             accelerationX: -100,
-            x:-40,
+            x:-28,
+            lifespan: 1000,
             tint:0xddbf37,
-            maxParticles: 60,
             scale: { start: 1, end: 0 },
             blendMode: 0 // add multiply screen erase
         });

@@ -7,7 +7,7 @@
     "build": "parcel build src/index.html --public-url ./ --out-dir docs --no-source-maps",
     "watch": "parcel watch src/index.html --out-dir docs",
     "start": "parcel serve src/index.html --open --out-dir docs",
-    "clean": "rm -v dist/*"
+    "clean": "rm -v docs/*"
   },
   "keywords": ["typescript","phaser3","parcel"],
   "author": "Kokodoko",

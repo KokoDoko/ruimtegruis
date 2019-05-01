@@ -2,7 +2,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     private particles:Phaser.GameObjects.Particles.ParticleEmitterManager
 
-    constructor(scene: Phaser.Scene, x:number, y:number) {
+    constructor(scene: Phaser.Scene, x:number, y:number, direction:number = 1) {
         super(scene, x, y, "bullet")       
         
         this.addParticles()
@@ -11,7 +11,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.add.existing(this) 
         this.setSize(this.displayWidth + 20, this.displayHeight + 20)
 
-        this.setVelocity(100,0)
+        this.setVelocity(100 * direction,0)
         this.setAccelerationX(400) 
         this.on('destroy', this.onBeforeDestroy)
     }

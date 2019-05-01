@@ -121,7 +121,5 @@ export class GameScene extends Phaser.Scene {
         // this.debugField.text = 'Bullets: ' + this.bulletGroup.getChildren().length
 
         this.ui.update()
-
-
     }
 }
