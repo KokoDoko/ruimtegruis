@@ -3,7 +3,7 @@ export class Rock extends Phaser.Physics.Arcade.Sprite {
     public score:number = 5
 
     constructor(scene: Phaser.Scene) {
-        super(scene, Phaser.Math.Between(800, 1100), Phaser.Math.Between(50, 550), "rock")       
+        super(scene, Phaser.Math.Between(800, 1100), Phaser.Math.Between(50, 650), "rock")       
         
         this.setScale(0.3 + Math.random() * 0.3) 
 
@@ -14,8 +14,8 @@ export class Rock extends Phaser.Physics.Arcade.Sprite {
     }
 
     public resetPosition() {
-        this.x = 1100
-        this.y = Phaser.Math.Between(50, 550)
+        this.x = 1400
+        this.y = Phaser.Math.Between(50, 650)
         this.resetVelocity()
     }
 

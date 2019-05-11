@@ -12,8 +12,9 @@ export class UI {
         this.lifebar = new Phaser.Geom.Rectangle(20, 20, 200, 20)
         this.graphics.fillRectShape(this.lifebar)
         this.graphics.strokeRectShape(new Phaser.Geom.Rectangle(20, 20, 200, 20))
-
-        this.scoreField = this.scene.add.text(480, 20, 'Score: ' + this.scene.registry.values.score, { fontFamily: '"Press Start 2P"', fontSize: 24, color: '#FFF' })
+        
+        let w = Number(this.scene.game.config.width)
+        this.scoreField = this.scene.add.text(w - 240, 20, 'Score: ' + this.scene.registry.values.score, { fontFamily: '"Press Start 2P"', fontSize: 24, color: '#FFF' })
     }
 
     public update() : void {

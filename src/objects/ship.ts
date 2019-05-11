@@ -1,13 +1,11 @@
-import {GameScene} from "../scenes/game-scene"
-
-// TODO DON'T IMPORT GAMESCENE
-// INSTEAD EMIT FIRE EVENT WHEN PRESSING SPACE
-// GAMESCENE LISTENS FOR FIRE EVENTS
+import { GameScene } from "../scenes/game-scene"
+import { Joystick } from "../utils/joystick"
 
 export class Ship extends Phaser.Physics.Arcade.Sprite {
 
     private cursors: Phaser.Input.Keyboard.CursorKeys
     private gameScene : GameScene
+    private joystick : Joystick
 
     constructor(scene: GameScene) {
         super(scene, 100,450, "ship")    
@@ -19,6 +17,9 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
         this.addPhysics()
         
         this.cursors = this.scene.input.keyboard.createCursorKeys()
+
+        this.joystick = new Joystick(6)
+        document.addEventListener("button0", () => this.handleFireButton())
     }
 
     private addPhysics(){
@@ -28,7 +29,12 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     }
 
     public update(): void {
-        this.handleInput();
+        // slow down
+        this.body.velocity.scale(0.95)
+        // input
+        this.joystick.update()
+        this.joystickInput()
+        this.keyboardInput()
     }
 
     
@@ -49,19 +55,26 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
         emitter.startFollow(this);
     }
 
-    private handleInput(): void {
-        // slow down
-        this.body.velocity.scale(0.95)
+    private joystickInput():void {
+        this.setVelocityX(this.joystick.XAxis * 400)
+        this.setVelocityY(this.joystick.YAxis * 400)
+    }
 
+    private handleFireButton():void {
+        this.gameScene.friendlyBullet()
+    }
+
+    private keyboardInput(): void {
         // todo normalise diagonals
 
-        // cursor
+        // move left right
         if (this.cursors.left.isDown) {
             this.setVelocityX(-350)
         } else if (this.cursors.right.isDown) {
             this.setVelocityX(350)
         }
 
+        // move down up
         if (this.cursors.up.isDown) {
             this.setVelocityY(-350)
         } else if (this.cursors.down.isDown) {

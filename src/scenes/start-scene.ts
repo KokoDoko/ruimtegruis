@@ -22,8 +22,11 @@ export class StartScene extends Phaser.Scene {
     }
 
     private showText(){
-        this.add.text(400, 300, 'RUIMTEGRUIS', { fontFamily: '"Press Start 2P"', fontSize: 70, color: '#FFF' }).setOrigin(0.5)
-        let go: Phaser.GameObjects.Text = this.add.text(400, 400, 'START', { fontFamily: '"Press Start 2P"', fontSize: 40, color: '#ff3434' }).setOrigin(0.5)
+        let w = Number(this.game.config.width)
+
+        this.add.text(w / 2, 520, 'use gamepad or cursor keys', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
+        this.add.text(w/2, 300, 'RUIMTEGRUIS', { fontFamily: '"Press Start 2P"', fontSize: 70, color: '#FFF' }).setOrigin(0.5)
+        let go: Phaser.GameObjects.Text = this.add.text(w/2, 400, 'START', { fontFamily: '"Press Start 2P"', fontSize: 40, color: '#ff3434' }).setOrigin(0.5)
         this.tweens.add({
             targets: go,
             alpha: 0.8,

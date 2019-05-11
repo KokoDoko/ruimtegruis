@@ -6,7 +6,7 @@ A space shooter built in [Phaser 3](https://phaser.io/phaser3) with [Typescript]
 
 ![ruimtegruis](ruimtegruis.png)
 
-## Preparing
+## Build the project
 
 ```sh
 # Install tools
@@ -20,6 +20,10 @@ npm run start
 # build project
 npm run build
 ```
+
+## Typescript + Phaser Workshop
+
+Check the [HR-CMGT workshop](https://github.com/HR-CMGT/CLE4-phaser-workshop) to learn more about using Phaser with Typescript.
 
 ## Typescript Classes
 
@@ -80,18 +84,12 @@ export class Rock extends Phaser.Physics.Arcade.Sprite {
 ```
 The `update` method gets called automatically when the sprite is part of a group in the parent scene. If not, you have to call `update` manually from the parent scene.
 
-## Workshop
-
-Check the [HR-CMGT workshop]() to learn more about using Phaser with Typescript.
-
 ## Phaser documentation
 
 Note that the official docs are in Javascript, which may need some small adjustments to work in a Typescript project.
 
-- [Phaser 3 Examples](http://labs.phaser.io) - A great source for exploring. Click **EDIT** to see the source code 🤩!
+- [Phaser 3 Examples](http://labs.phaser.io)
 - [Phaser 3 Documentation](https://photonstorm.github.io/phaser3-docs/index.html)
-- [Getting started with Phaser 3](https://phaser.io/tutorials/getting-started-phaser3)
-- [Phaser 3 Coding Tips](https://phaser.io/learn/community-tutorials)
 
 ## Inspiration
 

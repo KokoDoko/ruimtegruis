@@ -11,6 +11,7 @@ export class GameScene extends Phaser.Scene {
     private bgtile: Phaser.GameObjects.TileSprite
     private rockGroup : Phaser.GameObjects.Group
     private bulletGroup: Phaser.GameObjects.Group
+    private enemyBulletGroup: Phaser.GameObjects.Group
     private enemyGroup: Phaser.GameObjects.Group
     private counter:integer = 0
 
@@ -30,13 +31,14 @@ export class GameScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.bgtile = this.add.tileSprite(0, 0, 800, 600, 'bg')
+        this.bgtile = this.add.tileSprite(0, 0, 1200, 675, 'bg')
         this.bgtile.setOrigin(0,0)
         
         this.ship = new Ship(this)
 
         // group heeft auto update+add to scene, en auto remove+destroy, en group collision
         this.bulletGroup = this.add.group({ runChildUpdate: true }) 
+        this.enemyBulletGroup = this.add.group({ runChildUpdate: true }) 
         this.rockGroup = this.add.group({ runChildUpdate: true })
         this.enemyGroup = this.add.group({ runChildUpdate: true })
         
@@ -55,6 +57,9 @@ export class GameScene extends Phaser.Scene {
         // overlap for bullets (overlap ignores physics), why not put rocks and enemies in the same group?
         this.physics.add.overlap(this.bulletGroup, this.rockGroup, this.shootTarget, null, this)
         this.physics.add.overlap(this.bulletGroup, this.enemyGroup, this.shootTarget, null, this)
+
+        // enemy bullets can hit player
+        this.physics.add.overlap(this.ship, this.enemyBulletGroup, this.shootPlayer, null, this)
 
         this.ui = new UI(this)
 
@@ -75,7 +80,17 @@ export class GameScene extends Phaser.Scene {
 
     // add bullet to friendly group. collide friendly bullet group with rock group / with enemy ships (not in group)
     public friendlyBullet(){
-        this.bulletGroup.add(new Bullet(this, this.ship.x+10, this.ship.y), true)
+        this.bulletGroup.add(new Bullet(this, this.ship.x+20, this.ship.y), true)
+    }
+
+    public hostileBullet(x:number, y:number) {
+        this.enemyBulletGroup.add(new Bullet(this, x, y, -1), true)
+    }
+
+    private shootPlayer(s : Ship, b : Bullet) {
+        this.explosion(b.x, b.y)
+        this.enemyBulletGroup.remove(b, true, true)
+        this.registry.values.life = this.registry.values.life - 25
     }
 
     private shootTarget(b: Bullet, t: Rock | Enemy) {
