@@ -30,7 +30,7 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
 
     public update(): void {
         // slow down
-        this.body.velocity.scale(0.95)
+        this.body.velocity.scale(0.99)
         // input
         this.joystick.update()
         this.joystickInput()

@@ -54,13 +54,13 @@ export class Joystick {
                 let pad: Gamepad | null = gamepads[0]
                 if (pad) {
                     this.readGamepad(pad)
-                }
-            }
+                } 
+            } 
         }
     }
 
     public readGamepad(gamepad: Gamepad) : void {
-                    
+         
         for (let i = 0; i < this.numberOfBUttons; i++) {
             if (this.buttonPressed(gamepad.buttons[i]) && !this.buttonPressed(this.previousGamepad.buttons[i])) 
             {
