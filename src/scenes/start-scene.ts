@@ -1,5 +1,7 @@
 export class StartScene extends Phaser.Scene {
 
+    private bgtile: Phaser.GameObjects.TileSprite
+
     constructor() {
         super({key: "StartScene"})
     }
@@ -11,7 +13,8 @@ export class StartScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.add.image(0, 0, 'demo').setOrigin(0, 0)
+        this.bgtile = this.add.tileSprite(0, 0, 1200, 675, 'bg').setOrigin(0, 0)
+        // this.add.image(200, 300, 'ship').setOrigin(0, 0)
 
         this.showText()
 
@@ -23,13 +26,24 @@ export class StartScene extends Phaser.Scene {
 
     private showText(){
         let w = Number(this.game.config.width)
+        
+        let title: Phaser.GameObjects.Text = this.add.text(w/2, -100, 'RUIMTEGRUIS', { fontFamily: '"Press Start 2P"', fontSize: 70, color: '#FFF' }).setOrigin(0.5)
+        let start: Phaser.GameObjects.Text = this.add.text(w/2, 380, 'START', { fontFamily: '"Press Start 2P"', fontSize: 40, color: '#ff3434' }).setOrigin(0.5)
+        
+        this.add.text(w / 2, 520, 'Shoot enemey ships or bounce rocks into them!', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
+        this.add.text(w / 2, 560, 'Use gamepad or cursor keys', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
 
-        this.add.text(w / 2, 520, 'use gamepad or cursor keys', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
-        this.add.text(w/2, 300, 'RUIMTEGRUIS', { fontFamily: '"Press Start 2P"', fontSize: 70, color: '#FFF' }).setOrigin(0.5)
-        let go: Phaser.GameObjects.Text = this.add.text(w/2, 400, 'START', { fontFamily: '"Press Start 2P"', fontSize: 40, color: '#ff3434' }).setOrigin(0.5)
         this.tweens.add({
-            targets: go,
-            alpha: 0.8,
+            targets: title,
+            y: 200,
+            duration: 1600,
+            ease: 'Back',
+            easeParams: [3.5],
+            delay:500
+        });
+
+        this.tweens.add({
+            targets: start,
             scaleX: 1.2,
             scaleY: 1.2,
             ease: 'Cubic.easeInOut',
@@ -37,5 +51,10 @@ export class StartScene extends Phaser.Scene {
             yoyo: true,
             repeat: -1
         })
+        
+    }
+
+    public update(): void {
+        this.bgtile.tilePositionX += 4
     }
 }

@@ -3,7 +3,7 @@ export class Rock extends Phaser.Physics.Arcade.Sprite {
     public score:number = 5
 
     constructor(scene: Phaser.Scene) {
-        super(scene, Phaser.Math.Between(800, 1100), Phaser.Math.Between(50, 650), "rock")       
+        super(scene, Phaser.Math.Between(1300, 1500), Phaser.Math.Between(50, 650), "rock")       
         
         this.setScale(0.3 + Math.random() * 0.3) 
 

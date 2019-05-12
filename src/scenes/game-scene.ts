@@ -15,9 +15,6 @@ export class GameScene extends Phaser.Scene {
     private enemyGroup: Phaser.GameObjects.Group
     private counter:integer = 0
 
-    // todo
-    // enemy bullets
-
     // debug
     // private debugField : Phaser.GameObjects.Text
     
@@ -31,8 +28,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.bgtile = this.add.tileSprite(0, 0, 1200, 675, 'bg')
-        this.bgtile.setOrigin(0,0)
+        this.bgtile = this.add.tileSprite(0, 0, 1200, 675, 'bg').setOrigin(0,0)
         
         this.ship = new Ship(this)
 
@@ -42,32 +38,38 @@ export class GameScene extends Phaser.Scene {
         this.rockGroup = this.add.group({ runChildUpdate: true })
         this.enemyGroup = this.add.group({ runChildUpdate: true })
         
-        for (let i = 0; i < 14; i++) {
+        for (let i = 0; i < 8; i++) {
             this.rockGroup.add(new Rock(this), true)
         }
 
-        for (let i = 0; i < 3; i++) {
-            this.enemyGroup.add(new Enemy(this), true)
-        }
+        this.enemyGroup.add(new Enemy(this), true)
 
-        // collisions 
-        this.physics.add.collider(this.ship, this.rockGroup, this.hitRock, null, this)
+        // collisions between player and rocks just causes bouncing
+        this.physics.add.collider(this.ship, this.rockGroup)
         this.physics.add.collider(this.ship, this.enemyGroup, this.hitEnemy, null, this)
-
+        
         // overlap for bullets (overlap ignores physics), why not put rocks and enemies in the same group?
         this.physics.add.overlap(this.bulletGroup, this.rockGroup, this.shootTarget, null, this)
         this.physics.add.overlap(this.bulletGroup, this.enemyGroup, this.shootTarget, null, this)
+        this.physics.add.overlap(this.enemyGroup, this.rockGroup, this.hitRock, null, this)
 
         // enemy bullets can hit player
         this.physics.add.overlap(this.ship, this.enemyBulletGroup, this.shootPlayer, null, this)
 
         this.ui = new UI(this)
-
-        // this.debugField = this.add.text(20, 550, "Bullets: 0", { fontFamily: '"Press Start 2P"', fontSize: 18, color: '#FFF' })
     }
 
-    private hitRock(s: Ship, r: Rock) {
-        this.registry.values.life = this.registry.values.life - 10
+    // an enemy is hit by a bouncing rock!
+    private hitRock(e:Enemy, r: Rock) {
+        // score
+        this.registry.values.score += e.score
+
+        // boom
+        this.explosion(e.x, e.y)
+
+        // reset rock and enemy
+        e.resetPosition()
+        r.resetPosition()
     }
 
     private hitEnemy(s:Ship, e:Enemy){
@@ -84,7 +86,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     public hostileBullet(x:number, y:number) {
-        this.enemyBulletGroup.add(new Bullet(this, x, y, -1), true)
+        this.enemyBulletGroup.add(new Bullet(this, x, y, true), true)
     }
 
     private shootPlayer(s : Ship, b : Bullet) {
@@ -105,12 +107,6 @@ export class GameScene extends Phaser.Scene {
 
         // reset rock or enemy
         t.resetPosition()
-
-        // the more you shoot the more rocks appear
-        this.counter++
-        if(this.counter % 4 == 0) {
-             this.rockGroup.add(new Rock(this), true)
-        }
     }
 
     private explosion(x: number, y: number) {
@@ -130,11 +126,18 @@ export class GameScene extends Phaser.Scene {
     }
 
     public update(): void {
-        this.bgtile.tilePositionX += 3
+        this.bgtile.tilePositionX += 4
 
         this.ship.update()
         // this.debugField.text = 'Bullets: ' + this.bulletGroup.getChildren().length
 
         this.ui.update()
+
+        // more rocks and enemies
+        this.counter++
+        if (this.counter % 420 == 0) {
+            this.rockGroup.add(new Rock(this), true)
+            this.enemyGroup.add(new Enemy(this), true)
+        }
     }
 }
