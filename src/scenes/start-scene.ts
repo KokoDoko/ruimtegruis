@@ -1,6 +1,7 @@
 export class StartScene extends Phaser.Scene {
 
     private bgtile: Phaser.GameObjects.TileSprite
+    private cursors: Phaser.Input.Keyboard.CursorKeys
 
     constructor() {
         super({key: "StartScene"})
@@ -13,7 +14,8 @@ export class StartScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.bgtile = this.add.tileSprite(0, 0, 1200, 675, 'bg').setOrigin(0, 0)
+        this.cursors = this.input.keyboard.createCursorKeys()
+        this.bgtile = this.add.tileSprite(0, 0, 1440, 900, 'bg').setOrigin(0, 0)
         // this.add.image(200, 300, 'ship').setOrigin(0, 0)
 
         this.showText()
@@ -27,19 +29,19 @@ export class StartScene extends Phaser.Scene {
     private showText(){
         let w = Number(this.game.config.width)
         
-        let title: Phaser.GameObjects.Text = this.add.text(w/2, -100, 'RUIMTEGRUIS', { fontFamily: '"Press Start 2P"', fontSize: 70, color: '#FFF' }).setOrigin(0.5)
-        let start: Phaser.GameObjects.Text = this.add.text(w/2, 380, 'START', { fontFamily: '"Press Start 2P"', fontSize: 40, color: '#ff3434' }).setOrigin(0.5)
+        let title: Phaser.GameObjects.Text = this.add.text(w/2, -100, 'RUIMTEGRUIS', { fontFamily: '"Press Start 2P"', fontSize: 76, color: '#FFF' }).setOrigin(0.5)
+        let start: Phaser.GameObjects.Text = this.add.text(w/2, 380, 'PRESS FIRE TO START', { fontFamily: '"Press Start 2P"', fontSize: 34, color: '#ff3434' }).setOrigin(0.5)
         
         this.add.text(w / 2, 520, 'Shoot enemey ships or bounce rocks into them!', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
         this.add.text(w / 2, 560, 'Use gamepad or cursor keys', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
 
         this.tweens.add({
             targets: title,
-            y: 200,
+            y: 220,
             duration: 1600,
             ease: 'Back',
             easeParams: [3.5],
-            delay:500
+            delay:100
         });
 
         this.tweens.add({
@@ -56,5 +58,9 @@ export class StartScene extends Phaser.Scene {
 
     public update(): void {
         this.bgtile.tilePositionX += 4
+
+        if (this.cursors.space.isDown) {
+            this.scene.start('GameScene')
+        }
     }
 }

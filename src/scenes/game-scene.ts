@@ -28,7 +28,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.bgtile = this.add.tileSprite(0, 0, 1200, 675, 'bg').setOrigin(0,0)
+        this.bgtile = this.add.tileSprite(0, 0, 1440, 900, 'bg').setOrigin(0,0)
         
         this.ship = new Ship(this)
 

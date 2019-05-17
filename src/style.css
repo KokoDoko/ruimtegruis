@@ -4,7 +4,8 @@ body {
 }
 
 #game {
-    width:1200px;
-    height:675px;
+    width:1440px;
+    height:900px;
     margin: 0 auto;
+    cursor: none;
 }

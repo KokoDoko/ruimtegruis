@@ -1,6 +1,7 @@
 export class GameOver extends Phaser.Scene {
 
     private bgtile: Phaser.GameObjects.TileSprite
+    private cursors: Phaser.Input.Keyboard.CursorKeys
 
     constructor() {
         super({key: "GameOver"})
@@ -13,16 +14,34 @@ export class GameOver extends Phaser.Scene {
     }
     
     create(): void {
-        this.bgtile = this.add.tileSprite(0, 0, 1200, 675, 'bg').setOrigin(0, 0)
+        this.cursors = this.input.keyboard.createCursorKeys()
+        this.bgtile = this.add.tileSprite(0, 0, 1440, 900, 'bg').setOrigin(0, 0)
 
         let w = Number(this.game.config.width)
 
-        this.add.text(w/2, 180, 'GAME OVER', { fontFamily: '"Press Start 2P"', fontSize: 50, color: '#FFF' }).setOrigin(0.5)
-        this.add.text(w/2, 240, 'Score: ' + this.registry.values.score, { fontFamily: '"Press Start 2P"', fontSize: 26, color: '#FFF' }).setOrigin(0.5)
-        let go: Phaser.GameObjects.Text = this.add.text(w/2, 420, 'CLICK TO PLAY AGAIN ', { fontFamily: '"Press Start 2P"', fontSize: 22, color: '#ff3434' }).setOrigin(0.5)
+        let t1 : Phaser.GameObjects.Text = this.add.text(w/2, -100, 'GAME OVER', { fontFamily: '"Press Start 2P"', fontSize: 70, color: '#FFF' }).setOrigin(0.5)
+        let t2 : Phaser.GameObjects.Text = this.add.text(w/2, -100, 'Score: ' + this.registry.values.score, { fontFamily: '"Press Start 2P"', fontSize: 28, color: '#FFF' }).setOrigin(0.5)
+        let t3 : Phaser.GameObjects.Text = this.add.text(w/2, 520, 'PRESS FIRE TO PLAY AGAIN ', { fontFamily: '"Press Start 2P"', fontSize: 22, color: '#ff3434' }).setOrigin(0.5)
 
         this.tweens.add({
-            targets: go,
+            targets: t1,
+            y: 220,
+            duration: 1600,
+            ease: 'Back',
+            easeParams: [3.5],
+            delay: 100
+        })
+
+        this.tweens.add({
+            targets: t2,
+            y: 320,
+            duration: 1600,
+            ease: 'Back',
+            easeParams: [3.5],
+            delay: 400
+        })
+        this.tweens.add({
+            targets: t3,
             alpha: 0.8,
             scaleX: 1.2,
             scaleY: 1.2,
@@ -39,5 +58,9 @@ export class GameOver extends Phaser.Scene {
 
     public update(): void {
         this.bgtile.tilePositionX += 4
+
+        if (this.cursors.space.isDown) {
+            this.scene.start('GameScene')
+        }
     }
 }
