@@ -26,6 +26,15 @@ const config: GameConfig = {
 export class Game extends Phaser.Game {
   constructor(config: GameConfig) {
     super(config)
+
+    window.addEventListener("resize", ()=>this.resize())
+    this.resize()
+  }
+
+  public resize(){
+    let scale = Math.min(window.innerWidth/1000, window.innerHeight/625)
+    let div : HTMLElement = document.querySelector("#game")! as HTMLElement
+    div.style.transform = `scale(${scale})`
   }
 }
 

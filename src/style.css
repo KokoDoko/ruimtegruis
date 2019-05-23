@@ -10,5 +10,14 @@ body {
     margin: 0 auto;
     cursor: none;
     overflow: hidden;
-    border:2px solid pink;
+    transform-origin: center center;
+}
+
+#container {
+    width:100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border:2px solid red;
 }
