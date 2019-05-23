@@ -2,6 +2,7 @@ body {
     background-color:black;
     margin:0; padding:0;
     overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 #game {
@@ -10,13 +11,32 @@ body {
     margin: 0 auto;
     cursor: none;
     overflow: hidden;
-    transform-origin: center center;
+    transform-origin: left top;
 }
 
-#container {
-    width:100vw;
-    height:100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* RESPONSIVE WARNING */
+
+warning {
+    display:none;
+}
+
+@media screen and (orientation:portrait) {
+    warning {
+        display:block !important;
+        box-sizing: border-box;
+        background-color:white;
+        position: absolute;
+        left:0px; top:0px;
+        padding:4vw;
+        width:100vw; height:100vh;
+        z-index:10;
+        background-color:white;
+        color:purple;
+        text-align:center;
+        font-size:3.6vw;
+        line-height:2.4vh;
+    }
+    .small {
+        font-size:2.2vw;
+    }
 }
