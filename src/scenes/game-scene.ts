@@ -24,11 +24,11 @@ export class GameScene extends Phaser.Scene {
 
     init(): void {
         this.registry.set("score", 0)
-        this.registry.set("life", 250)
+        this.registry.set("life", 300)
     }
 
     create(): void {
-        this.bgtile = this.add.tileSprite(0, 0, 1440, 900, 'bg').setOrigin(0,0)
+        this.bgtile = this.add.tileSprite(0, 0, 1000, 625, 'bg').setOrigin(0,0)
         
         this.ship = new Ship(this)
 
@@ -77,7 +77,7 @@ export class GameScene extends Phaser.Scene {
         
         e.resetPosition()
 
-        this.registry.values.life = this.registry.values.life - 25
+        this.registry.values.life = this.registry.values.life - 30
     }
 
     // add bullet to friendly group. collide friendly bullet group with rock group / with enemy ships (not in group)
@@ -92,7 +92,7 @@ export class GameScene extends Phaser.Scene {
     private shootPlayer(s : Ship, b : Bullet) {
         this.explosion(b.x, b.y)
         this.enemyBulletGroup.remove(b, true, true)
-        this.registry.values.life = this.registry.values.life - 25
+        this.registry.values.life = this.registry.values.life - 35
     }
 
     private shootTarget(b: Bullet, t: Rock | Enemy) {

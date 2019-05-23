@@ -5,8 +5,8 @@ import { GameScene } from "./scenes/game-scene";
 import { GameOver } from "./scenes/game-over";
 
 const config: GameConfig = {
-    width: 1440,
-    height: 900,
+    width: 1000,
+    height: 625,
     parent: "game",
     resolution: window.devicePixelRatio, // added
     scene: [BootScene, StartScene, GameScene, GameOver],

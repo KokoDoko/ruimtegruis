@@ -8,13 +8,13 @@ export class UI {
     constructor(scene: Phaser.Scene) {
         this.scene = scene
 
-        this.graphics = this.scene.add.graphics({ lineStyle: { width: 2, color: 0xFFFFFF }, fillStyle: { color: 0x00AA00 } })
-        this.lifebar = new Phaser.Geom.Rectangle(20, 20, 300, 20)
+        this.graphics = this.scene.add.graphics({ lineStyle: { width: 1, color: 0xFFFFFF }, fillStyle: { color: 0x00AA00 } })
+        this.lifebar = new Phaser.Geom.Rectangle(20, 20, 300, 16)
         this.graphics.fillRectShape(this.lifebar)
-        this.graphics.strokeRectShape(new Phaser.Geom.Rectangle(20, 20, 300, 20))
+        this.graphics.strokeRectShape(new Phaser.Geom.Rectangle(20, 20, 300, 16))
         
         let w = Number(this.scene.game.config.width)
-        this.scoreField = this.scene.add.text(w - 240, 20, 'Score: ' + this.scene.registry.values.score, { fontFamily: '"Press Start 2P"', fontSize: 24, color: '#FFF' })
+        this.scoreField = this.scene.add.text(w - 10, 20, 'Score: ' + this.scene.registry.values.score, { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(1,0.5)
     }
 
     public update() : void {
@@ -22,7 +22,7 @@ export class UI {
         if (this.lifebar.width > this.scene.registry.values.life) this.lifebar.width--
         this.graphics.clear()
         this.graphics.fillRectShape(this.lifebar)
-        this.graphics.strokeRectShape(new Phaser.Geom.Rectangle(20, 20, 300, 20))
+        this.graphics.strokeRectShape(new Phaser.Geom.Rectangle(20, 20, 300, 16))
 
         if (this.lifebar.width < 0) {
             this.scene.scene.start('GameOver')

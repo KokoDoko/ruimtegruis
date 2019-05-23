@@ -15,8 +15,9 @@ export class StartScene extends Phaser.Scene {
 
     create(): void {
         this.cursors = this.input.keyboard.createCursorKeys()
-        this.bgtile = this.add.tileSprite(0, 0, 1440, 900, 'bg').setOrigin(0, 0)
-        // this.add.image(200, 300, 'ship').setOrigin(0, 0)
+        this.bgtile = this.add.tileSprite(0, 0, 1000, 625, 'bg').setOrigin(0, 0)
+
+        
 
         this.showText()
 
@@ -28,16 +29,19 @@ export class StartScene extends Phaser.Scene {
 
     private showText(){
         let w = Number(this.game.config.width)
+        let hiscore = Number(localStorage.getItem('hiscore'))
+
+        this.add.text(w / 2, 30, 'Hiscore: ' + hiscore, { fontFamily: '"Press Start 2P"', fontSize: 18, color: '#FFF' }).setOrigin(0.5)
         
-        let title: Phaser.GameObjects.Text = this.add.text(w/2, -100, 'RUIMTEGRUIS', { fontFamily: '"Press Start 2P"', fontSize: 76, color: '#FFF' }).setOrigin(0.5)
-        let start: Phaser.GameObjects.Text = this.add.text(w/2, 380, 'PRESS FIRE TO START', { fontFamily: '"Press Start 2P"', fontSize: 34, color: '#ff3434' }).setOrigin(0.5)
+        let title: Phaser.GameObjects.Image = this.add.image(500, 100, 'title')
+        let start: Phaser.GameObjects.Text = this.add.text(w / 2, 410, 'PRESS FIRE TO START', { fontFamily: '"Press Start 2P"', fontSize: 34, color: 'rgb(221,48,212)' }).setOrigin(0.5)
         
-        this.add.text(w / 2, 520, 'Shoot enemey ships or bounce rocks into them!', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
+        this.add.text(w / 2, 520, 'Shoot enemy ships or bounce rocks into them!', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
         this.add.text(w / 2, 560, 'Use gamepad or cursor keys', { fontFamily: '"Press Start 2P"', fontSize: 20, color: '#FFF' }).setOrigin(0.5)
 
         this.tweens.add({
             targets: title,
-            y: 220,
+            y: 230,
             duration: 1600,
             ease: 'Back',
             easeParams: [3.5],
@@ -46,8 +50,8 @@ export class StartScene extends Phaser.Scene {
 
         this.tweens.add({
             targets: start,
-            scaleX: 1.2,
-            scaleY: 1.2,
+            scaleX: 1.05,
+            scaleY: 1.05,
             ease: 'Cubic.easeInOut',
             duration: 650,
             yoyo: true,

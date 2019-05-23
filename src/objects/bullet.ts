@@ -40,7 +40,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
     }
 
     public update(): void {
-        if (this.x > 1300 || this.x < -300) {
+        if (this.x > 1100 || this.x < -200) {
             this.destroy()
         }
     }

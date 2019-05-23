@@ -8,11 +8,11 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     private joystick : Joystick
 
     constructor(scene: GameScene) {
-        super(scene, 180,450, "ship")    
+        super(scene, 180,350, "ship")    
         this.gameScene = scene
         
         this.addParticles()
-        this.setScale(0.7)
+        this.setScale(0.55)
         this.scene.add.existing(this)
         this.addPhysics()
         

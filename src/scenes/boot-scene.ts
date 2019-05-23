@@ -24,6 +24,7 @@ export class BootScene extends Phaser.Scene {
     preload(): void {
         this.load.image('loading', require("../assets/loading.png"))
         this.load.image('demo', require("../assets/ruimtegruis.png"))
+        this.load.image('title', require("../assets/gruis_title.png"))
         this.load.image('ship', require("../assets/ship.png"))
         this.load.image('rock', require('../assets/block3.png'))
         this.load.image('bg', require('../assets/background.png'))

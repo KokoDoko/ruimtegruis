@@ -7,11 +7,11 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     private bulletTimer : number = Math.floor(Math.random() * 80)
 
     constructor(scene: GameScene) {
-        super(scene, Phaser.Math.Between(1500, 1650), Phaser.Math.Between(100, 800), "enemy")       
+        super(scene, Phaser.Math.Between(1100, 1400), Phaser.Math.Between(80, 580), "enemy")       
 
         this.gameScene = scene
         
-        this.setScale(0.7)
+        this.setScale(0.55)
         this.scene.add.existing(this)
         this.scene.physics.add.existing(this)
 
@@ -20,8 +20,8 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     public resetPosition() {
-        this.x = Phaser.Math.Between(1500, 1650)
-        this.y = Phaser.Math.Between(100, 800)
+        this.x = Phaser.Math.Between(1100, 1400)
+        this.y = Phaser.Math.Between(40, 650)
         this.setVelocity(Phaser.Math.Between(-200, -140), 0)
     }
 
