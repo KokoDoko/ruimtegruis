@@ -29,6 +29,8 @@ export class GameOver extends Phaser.Scene {
         let hiscore = Number(localStorage.getItem('hiscore'))
         let scoreText = 'Score: ' + this.registry.values.score
 
+        this.add.text(w - 10, 30, 'Hiscore: ' + hiscore, { fontFamily: '"Press Start 2P"', fontSize: 18, color: '#FFF' }).setOrigin(1, 0.5)
+
         if (this.registry.values.score > hiscore) {
             localStorage.setItem('hiscore', String(this.registry.values.score))
             scoreText += " -- A NEW HISCORE!"
