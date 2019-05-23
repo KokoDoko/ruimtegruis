@@ -8,7 +8,6 @@ body {
 #game {
     width:1000px;
     height:625px;
-    margin: 0 auto;
     cursor: none;
     overflow: hidden;
     transform-origin: left top;
