@@ -32,10 +32,16 @@ export class Game extends Phaser.Game {
   }
 
   public resize(){
+        // WE HAVE TO SCALE THE CANVAS
+        // PHASER SCALE CONFIG DOCUMENTATION IS INCORRECT 
         // NOTE: als je zelf scaling uitrekent moet viewport meta-tag weg uit html!!
+        
         let scale = Math.min(window.innerWidth/1000, window.innerHeight/625)
         let div : HTMLElement = document.querySelector("#game")! as HTMLElement;
-        div.style.transform = `scale(${scale})`
+        let canvas = div.querySelector("canvas")
+        
+        canvas.style.transform = `scale(${scale})`
+        //div.style.transform = `scale(${scale})`
   }
 }
 
