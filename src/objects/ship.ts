@@ -1,11 +1,14 @@
 import { GameScene } from "../scenes/game-scene"
-import { Joystick } from "../utils/joystick"
+import { Arcade } from "../utils/arcade"
+import { RuimteGruis } from "../game"
 
 export class Ship extends Phaser.Physics.Arcade.Sprite {
 
     private cursors: Phaser.Input.Keyboard.CursorKeys
     private gameScene : GameScene
-    private joystick : Joystick
+    private arcade : Arcade
+    private fireListener: EventListener
+    private bombListener: EventListener
 
     constructor(scene: GameScene) {
         super(scene, 180,350, "ship")    
@@ -16,10 +19,15 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
         this.scene.add.existing(this)
         this.addPhysics()
         
+        let g = this.scene.game as RuimteGruis
+        this.arcade = g.arcade
         this.cursors = this.scene.input.keyboard.createCursorKeys()
 
-        this.joystick = new Joystick(6)
-        document.addEventListener("button0", () => this.handleFireButton())
+        // joystick fire button
+        this.fireListener = () => this.handleFireButton()
+        this.bombListener = () => this.handleBombButton()
+        document.addEventListener("joystick0button0", this.fireListener)
+        document.addEventListener("joystick0button1", this.bombListener)
     }
 
     private addPhysics(){
@@ -32,9 +40,19 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
         // slow down
         this.body.velocity.scale(0.99)
         // input
-        this.joystick.update()
         this.joystickInput()
         this.keyboardInput()
+
+        // als gameover
+        if (this.scene.registry.values.life <= 0) {
+            this.gameOver()
+        }
+    }
+
+    private gameOver(){
+        document.removeEventListener("joystick0button0", this.fireListener)
+        document.removeEventListener("joystick0button1", this.bombListener)
+        this.scene.scene.start('GameOver')
     }
 
     
@@ -56,12 +74,21 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     }
 
     private joystickInput():void {
-        this.setVelocityX(this.joystick.XAxis * 400)
-        this.setVelocityY(this.joystick.YAxis * 400)
+        for (let joystick of this.arcade.Joysticks) {
+            joystick.update()
+        }
+        if (this.arcade.Joysticks[0]) {
+            this.setVelocityX(this.arcade.Joysticks[0].X * 400)
+            this.setVelocityY(this.arcade.Joysticks[0].Y * 400)
+        }
     }
 
     private handleFireButton():void {
         this.gameScene.friendlyBullet()
+    }
+
+    private handleBombButton():void {
+        this.gameScene.dropBomb()
     }
 
     private keyboardInput(): void {

@@ -2,6 +2,7 @@ import { Enemy } from "../objects/enemy"
 import { Ship } from "../objects/ship"
 import { Rock } from "../objects/rock"
 import { Bullet } from "../objects/bullet"
+import { Bomb } from "../objects/bomb"
 import { UI } from "../objects/ui"
 
 export class GameScene extends Phaser.Scene {
@@ -23,8 +24,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     init(): void {
-        this.registry.set("score", 0)
-        this.registry.set("life", 300)
+        
     }
 
     create(): void {
@@ -46,6 +46,8 @@ export class GameScene extends Phaser.Scene {
 
         // collisions between player and rocks just causes bouncing
         this.physics.add.collider(this.ship, this.rockGroup)
+
+        // kan ook overlap zijn?
         this.physics.add.collider(this.ship, this.enemyGroup, this.hitEnemy, null, this)
         
         // overlap for bullets (overlap ignores physics), why not put rocks and enemies in the same group?
@@ -53,7 +55,7 @@ export class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.bulletGroup, this.enemyGroup, this.shootTarget, null, this)
         this.physics.add.overlap(this.enemyGroup, this.rockGroup, this.hitRock, null, this)
 
-        // enemy bullets can hit player
+        // enemy bullets and powerups hit player - function decides what to do
         this.physics.add.overlap(this.ship, this.enemyBulletGroup, this.shootPlayer, null, this)
 
         this.ui = new UI(this)
@@ -85,14 +87,35 @@ export class GameScene extends Phaser.Scene {
         this.bulletGroup.add(new Bullet(this, this.ship.x+20, this.ship.y), true)
     }
 
+    public dropBomb(){
+        if(this.registry.values.bombs > 0) {
+            this.registry.values.bombs -= 1
+            this.events.emit("bombsChanged") // for the UI
+            // enemy ships
+            for (let go of this.enemyGroup.getChildren()) {
+                let enemy = go as Enemy
+                this.registry.values.score += enemy.score
+                this.explosion(enemy.x, enemy.y)
+                enemy.resetPosition()
+            }
+        }
+    }
+
     public hostileBullet(x:number, y:number) {
         this.enemyBulletGroup.add(new Bullet(this, x, y, true), true)
     }
 
-    private shootPlayer(s : Ship, b : Bullet) {
-        this.explosion(b.x, b.y)
-        this.enemyBulletGroup.remove(b, true, true)
-        this.registry.values.life = this.registry.values.life - 35
+    private shootPlayer(s : Ship, b : Bullet | Bomb) {
+        if(b instanceof Bullet) {
+            this.explosion(b.x, b.y)
+            this.enemyBulletGroup.remove(b, true, true)
+            this.registry.values.life = this.registry.values.life - 35
+        }
+        if (b instanceof Bomb) {
+            this.enemyBulletGroup.remove(b, true, true)
+            this.registry.values.bombs++
+            this.events.emit("bombsChanged") // for the UI
+        }
     }
 
     private shootTarget(b: Bullet, t: Rock | Enemy) {
@@ -129,15 +152,20 @@ export class GameScene extends Phaser.Scene {
         this.bgtile.tilePositionX += 4
 
         this.ship.update()
-        // this.debugField.text = 'Bullets: ' + this.bulletGroup.getChildren().length
-
         this.ui.update()
 
-        // more rocks and enemies
+        // add enemies, rocks and bombs
         this.counter++
-        if (this.counter % 420 == 0) {
+        if (this.counter % 350 == 0 && this.rockGroup.getChildren().length < 60) {
             this.rockGroup.add(new Rock(this), true)
+        }
+
+        if (this.counter % 430 == 0) {
             this.enemyGroup.add(new Enemy(this), true)
+        }
+
+        if(this.counter % 400 == 0) {
+            this.enemyBulletGroup.add(new Bomb(this), true)
         }
     }
 }

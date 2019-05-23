@@ -1,7 +1,12 @@
+import { Arcade } from "../utils/arcade"
+import { RuimteGruis } from "../game"
+
 export class GameOver extends Phaser.Scene {
 
     private bgtile: Phaser.GameObjects.TileSprite
     private cursors: Phaser.Input.Keyboard.CursorKeys
+    private arcade: Arcade
+    private nextGameListener: EventListener
 
     constructor() {
         super({key: "GameOver"})
@@ -14,7 +19,10 @@ export class GameOver extends Phaser.Scene {
     }
     
     create(): void {
+        let g = this.game as RuimteGruis
+        this.arcade = g.arcade
         this.cursors = this.input.keyboard.createCursorKeys()
+        
         this.bgtile = this.add.tileSprite(0, 0, 1000, 625, 'bg').setOrigin(0, 0)
 
         let w = Number(this.game.config.width)
@@ -34,7 +42,7 @@ export class GameOver extends Phaser.Scene {
 
         this.tweens.add({
             targets: t1,
-            y: 220,
+            y: 230,
             duration: 1600,
             ease: 'Back',
             easeParams: [3.5],
@@ -60,16 +68,33 @@ export class GameOver extends Phaser.Scene {
             repeat:-1
         })
 
-        this.input.once('pointerdown', () => {
-            this.scene.start('GameScene')
-        })
+        // mouse click
+        this.input.once('pointerdown', () => this.nextGame())
+
+        // joystick fire button
+        this.nextGameListener = () => this.nextGame()
+        document.addEventListener("joystick0button0", this.nextGameListener)
     }
 
     public update(): void {
         this.bgtile.tilePositionX += 4
 
-        if (this.cursors.space.isDown) {
-            this.scene.start('GameScene')
+        for (let joystick of this.arcade.Joysticks) {
+            joystick.update()
         }
+
+        if (this.cursors.space.isDown) {
+            this.nextGame()
+        }
+    }
+
+    private nextGame(){
+        document.removeEventListener("joystick0button0", this.nextGameListener)
+
+        this.registry.set("score", 0)
+        this.registry.set("bombs", 3)
+        this.registry.set("life", 300)
+
+        this.scene.start('GameScene')
     }
 }
