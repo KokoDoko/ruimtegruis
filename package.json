@@ -9,14 +9,18 @@
     "start": "parcel serve src/index.html --open --out-dir docs",
     "clean": "rm -v docs/*"
   },
-  "keywords": ["typescript","phaser3","parcel"],
+  "keywords": [
+    "typescript",
+    "phaser3",
+    "parcel"
+  ],
   "author": "Kokodoko",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^11.13.8",
     "@types/webpack-env": "^1.13.9",
     "colors.css": "^3.0.0",
-    "phaser": "^3.16.2",
+    "phaser": "^3.17.0",
     "typescript": "^3.4.5"
   },
   "devDependencies": {

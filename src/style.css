@@ -6,12 +6,5 @@ body {
 }
 
 #game {
-    width:100vw;
-    height:62.5vw;
     cursor: none;
-    transform-origin: left top;
-}
-
-canvas {
-    transform-origin: left top;
 }

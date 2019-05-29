@@ -4,7 +4,7 @@ import { RuimteGruis } from "../game"
 
 export class Ship extends Phaser.Physics.Arcade.Sprite {
 
-    private cursors: Phaser.Input.Keyboard.CursorKeys
+    private cursors: Phaser.Types.Input.Keyboard.CursorKeys
     private gameScene : GameScene
     private arcade : Arcade
     private fireListener: EventListener
