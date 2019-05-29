@@ -22,8 +22,7 @@ export class Arcade {
      * Handles redirect fired from joystick
      */
     private onRedirect(): void {
-        console.log('redirect!!')
-        //window.location.href = this.REDIRECT_URL
+        window.location.href = this.REDIRECT_URL
     }
 
     /**
