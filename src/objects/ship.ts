@@ -9,7 +9,7 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     
 
     // Fields
-    private life        : number = 50
+    private life        : number = 300
     private cursors     : Phaser.Input.Keyboard.CursorKeys
     private joystick    : Joystick
     private fireListener: EventListener

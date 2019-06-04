@@ -6,7 +6,6 @@ export class ModeScene extends Phaser.Scene {
 
     private bgtile  : Phaser.GameObjects.TileSprite
     private cursors : Phaser.Input.Keyboard.CursorKeys
-    private arcade  : Arcade
     
     private mode : Mode = Mode.Single
     
@@ -28,9 +27,6 @@ export class ModeScene extends Phaser.Scene {
     }
 
     create(): void {
-        let g = this.game as RuimteGruis
-        this.arcade = g.Arcade
-
         this.cursors = this.input.keyboard.createCursorKeys()
         this.bgtile = this.add.tileSprite(0, 0, 1000, 625, 'bg').setOrigin(0, 0)
 
@@ -83,7 +79,7 @@ export class ModeScene extends Phaser.Scene {
     public update(): void {
         this.bgtile.tilePositionX += 4
 
-        for (let joystick of this.arcade.Joysticks) {
+        for (let joystick of (this.game as RuimteGruis).Arcade.Joysticks) {
             joystick.update()
             if      (joystick.Left)     this.switchPlayerMode(1)
             else if (joystick.Right)    this.switchPlayerMode(2)
