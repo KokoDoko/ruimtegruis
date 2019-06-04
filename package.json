@@ -9,7 +9,11 @@
     "start": "parcel serve src/index.html --open --out-dir docs",
     "clean": "rm -v docs/*"
   },
-  "keywords": ["typescript","phaser3","parcel"],
+  "keywords": [
+    "typescript",
+    "phaser3",
+    "parcel"
+  ],
   "author": "Kokodoko",
   "license": "ISC",
   "dependencies": {

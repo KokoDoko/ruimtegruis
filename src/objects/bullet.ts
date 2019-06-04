@@ -1,12 +1,18 @@
+import { Ship } from "./ship";
+
 export class Bullet extends Phaser.Physics.Arcade.Sprite {
 
     private particles:Phaser.GameObjects.Particles.ParticleEmitterManager
 
-    constructor(scene: Phaser.Scene, x:number, y:number, enemy:boolean = false) {
+    public ship :  Ship
+
+    constructor(scene: Phaser.Scene, x:number, y:number, ship : Ship, enemy:boolean = false) {
         super(scene, x, y, "bullet")       
-        
+        this.ship = ship
+
         let direction = (enemy) ? -1 : 1
-        let tint = (enemy) ? 0xFF0000 : 0xFFFFFF
+        
+        let tint = (enemy) ? 0x0000FF : ship.Color
 
         this.addParticles(tint)
         this.setScale(0.6) 
@@ -45,4 +51,7 @@ export class Bullet extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    public remove() {
+        this.ship.bulletGroup.remove(this, true, true)
+    }
 }
