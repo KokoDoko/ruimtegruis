@@ -40,6 +40,8 @@ export class ModeScene extends Phaser.Scene {
         this.nextGameListener = () => this.nextGame()
         document.addEventListener("joystick0button0", this.nextGameListener)
         document.addEventListener("joystick1button0", this.nextGameListener)
+
+        this.mode = Mode.Single
     }
 
     private showText(){

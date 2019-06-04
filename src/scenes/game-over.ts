@@ -118,10 +118,14 @@ export class GameOver extends Phaser.Scene {
         document.removeEventListener("joystick0button0", this.nextGameListener)
 
         let game = this.game as RuimteGruis
-        game.Players.forEach(p => p.Score = 0)
+        
+        game.Players = []
         Ship.Bombs = 2
         
-        this.scene.start('GameScene')
+        this.registry.set("mode", -1)
+        
+
+        this.scene.start('ModeScene')
     }
 
     private checkHighScore() : number {

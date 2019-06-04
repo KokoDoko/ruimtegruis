@@ -39,6 +39,7 @@ export class RuimteGruis extends Phaser.Game {
 	public set IsMultiPLayer(value  : boolean ) { this.isMultiPLayer = value    }
 
     public get Players()            : Player[]  { return this.players           }
+    public set Players(players:Player[])        { this.players = players        }
     public set Player(player:Player)            { this.players.push(player)     }
 
     constructor(config: GameConfig) {
