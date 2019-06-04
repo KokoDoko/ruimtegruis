@@ -2,7 +2,7 @@ import { Game } from "phaser";
 import { Joystick } from "./input/joystick";
 
 export class Arcade{
-    private readonly DEBUG          : boolean = true;
+    private readonly DEBUG          : boolean = false;
     private joysticks               : Joystick[]
     private readonly REDIRECT_URL   : string = "http://hr-cmgt.github.io/arcade-server"
     private multiplayer             : boolean = false

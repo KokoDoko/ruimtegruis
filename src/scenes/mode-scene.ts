@@ -38,6 +38,7 @@ export class ModeScene extends Phaser.Scene {
 
         // joystick fire button
         this.nextGameListener = () => this.nextGame()
+        
         document.addEventListener("joystick0button0", this.nextGameListener)
         document.addEventListener("joystick1button0", this.nextGameListener)
 
@@ -127,9 +128,6 @@ export class ModeScene extends Phaser.Scene {
     }
 
     private nextGame() {
-        document.removeEventListener("joystick0button0", this.nextGameListener)
-        document.removeEventListener("joystick1button0", this.nextGameListener)
-
         this.registry.set("mode", this.mode)
         // this.registry.set("bombs", 3)
         // this.registry.set("life", 300)
@@ -138,6 +136,9 @@ export class ModeScene extends Phaser.Scene {
             (this.game as RuimteGruis).Player = player
         }
         
+        document.removeEventListener("joystick0button0", this.nextGameListener)
+        document.removeEventListener("joystick1button0", this.nextGameListener)
+
         this.scene.start('GameScene')
     }
 }

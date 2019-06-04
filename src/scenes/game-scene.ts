@@ -82,7 +82,6 @@ export class GameScene extends Phaser.Scene {
     }
 
     public dropBomb(){
-        console.log("drop bomb")
         for (let go of this.enemyGroup.getChildren()) {
             let enemy   = go as Enemy
             let game    = this.game as RuimteGruis

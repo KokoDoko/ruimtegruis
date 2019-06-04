@@ -19,8 +19,8 @@ export class GameOver extends Phaser.Scene {
     }
     
     create(): void {
-        let g = this.game as RuimteGruis
-        // this.arcade = g.arcade
+        let game = this.game as RuimteGruis
+        
         this.cursors = this.input.keyboard.createCursorKeys()
         
         this.bgtile = this.add.tileSprite(0, 0, 1000, 625, 'bg').setOrigin(0, 0)
@@ -32,7 +32,7 @@ export class GameOver extends Phaser.Scene {
 
         // Player results
         let position    = this.registry.values.mode ? w / 2 - 200 : w / 2
-        let game        = this.game as RuimteGruis
+        
         let playerResults : Phaser.GameObjects.Text[] = []
         let highscoreText : Phaser.GameObjects.Text
 
@@ -98,16 +98,18 @@ export class GameOver extends Phaser.Scene {
 
         // joystick fire button
         this.nextGameListener = () => this.nextGame()
-        document.addEventListener("joystick0button0", this.nextGameListener)
+        // document.addEventListener("joystick0button0", this.nextGameListener)
+        for (const joystick of game.Arcade.Joysticks) {
+            document.addEventListener(joystick.ButtonEvents[0], this.nextGameListener)
+        }
     }
     
 
     public update(): void {
-        this.bgtile.tilePositionX += 4
+        this.bgtile.tilePositionX += 4;
 
-        // for (let joystick of this.arcade.Joysticks) {
-        //     joystick.update()
-        // }
+        // update all joysticks
+        (this.game as RuimteGruis).Arcade.Joysticks.forEach(j => j.update())
 
         if (this.cursors.space.isDown) {
             this.nextGame()
@@ -115,8 +117,6 @@ export class GameOver extends Phaser.Scene {
     }
 
     private nextGame(){
-        document.removeEventListener("joystick0button0", this.nextGameListener)
-
         let game = this.game as RuimteGruis
         
         game.Players = []
@@ -124,7 +124,10 @@ export class GameOver extends Phaser.Scene {
         
         this.registry.set("mode", -1)
         
-
+        for (const joystick of game.Arcade.Joysticks) {
+            document.removeEventListener(joystick.ButtonEvents[0], this.nextGameListener)
+        }
+        // document.removeEventListener("joystick0button0", this.nextGameListener)
         this.scene.start('ModeScene')
     }
 
