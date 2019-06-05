@@ -145,7 +145,7 @@ export class GameScene extends Phaser.Scene {
     public update(): void {
         // update all joysticks
         (this.game as RuimteGruis).Arcade.Joysticks.forEach(j => j.update())
-
+        
         this.bgtile.tilePositionX += 4
 
         // add enemies, rocks and bombs
