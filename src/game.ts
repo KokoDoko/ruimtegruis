@@ -46,7 +46,7 @@ export class RuimteGruis extends Phaser.Game {
         super(config)
 
         // create the arcade once, otherwise we keep connecting/disconnecting every scene
-        this.arcade = new Arcade(this)
+        this.arcade = new Arcade(this, true)
 
         window.addEventListener("resize", () => this.resizeGame())
         this.resizeGame()
