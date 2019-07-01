@@ -6,18 +6,12 @@ import { GameScene } from "../scenes/game-scene";
 
 export class Ship extends Phaser.Physics.Arcade.Sprite {
 
-<<<<<<< HEAD
-    private cursors: Phaser.Types.Input.Keyboard.CursorKeys
-    private gameScene : GameScene
-    private arcade : Arcade
-=======
     
 
     // Fields
     private life        : number = 300
     private cursors     : Phaser.Input.Keyboard.CursorKeys
     private joystick    : Joystick
->>>>>>> b63560b88ecc3b4c49562fe4d80fe0402ca4736d
     private fireListener: EventListener
     private bombListener: EventListener
     public bulletGroup  : Phaser.GameObjects.Group
