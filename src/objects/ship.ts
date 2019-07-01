@@ -1,33 +1,84 @@
-import { GameScene } from "../scenes/game-scene"
-import { Arcade } from "../utils/arcade"
-import { RuimteGruis } from "../game"
+import { Joystick } from "../utils/arcade/input/joystick";
+import { Bullet }   from "./bullet";
+import { UI }       from "./ui";
+import { Player }   from "../player";
+import { GameScene } from "../scenes/game-scene";
 
 export class Ship extends Phaser.Physics.Arcade.Sprite {
 
+<<<<<<< HEAD
     private cursors: Phaser.Types.Input.Keyboard.CursorKeys
     private gameScene : GameScene
     private arcade : Arcade
+=======
+    
+
+    // Fields
+    private life        : number = 300
+    private cursors     : Phaser.Input.Keyboard.CursorKeys
+    private joystick    : Joystick
+>>>>>>> b63560b88ecc3b4c49562fe4d80fe0402ca4736d
     private fireListener: EventListener
     private bombListener: EventListener
+    public bulletGroup  : Phaser.GameObjects.Group
+    private ui          : UI
+    private player      : Player
+    private fireKey     : Phaser.Input.Keyboard.Key
 
-    constructor(scene: GameScene) {
-        super(scene, 180,350, "ship")    
-        this.gameScene = scene
+    // Statics
+    public static COLORS : number[] = [0xFF0000, 0x00FF00]
+
+    private static bombs        : number = 2
+    public static get Bombs()   : number        { return Ship.bombs }
+    public static set Bombs(v:number)           { this.bombs = v    }
+    public static DecreaseBomb() : void         { if(this.bombs >= 1) this.bombs--  }
+    public static IncreaseBomb() : void         { if(this.bombs < 5)  this.bombs++  }
+    public static HasBombs()     : boolean      { return this.bombs > 0             }
+
+    // Properties
+    public get Score()          : number        { return this.player.Score          }
+    public set Score(score      : number)       { this.player.Score = score         }
+
+    public get Life()           : number        { return this.life                  }
+    public set Life(life : number) { 
+        this.life = life      
+        this.ui.LifeBar = this.life
+    }
+    public get Color()          : number        {  return this.player.Color         }
+
+    constructor(scene : Phaser.Scene, joystick : Joystick, player : Player) {
+        super(scene, 180, 300 + player.Number * 50, "ship")   
+        
+        this.joystick       = joystick
+        this.player         = player
+        this.bulletGroup    = this.scene.add.group({ runChildUpdate: true })
         
         this.addParticles()
         this.setScale(0.55)
         this.scene.add.existing(this)
         this.addPhysics()
         
-        let g = this.scene.game as RuimteGruis
-        this.arcade = g.arcade
-        this.cursors = this.scene.input.keyboard.createCursorKeys()
-
+        this.cursors        = this.scene.input.keyboard.createCursorKeys()
+        // this.scene.input.keyboard.addKeys({ 'fire': Phaser.Input.Keyboard.KeyCodes.CTRL})
+        // this.scene.input.keyboard.addKeys({ 'bomb': Phaser.Input.Keyboard.KeyCodes.SPACE})
+        
         // joystick fire button
-        this.fireListener = () => this.handleFireButton()
+        this.fireListener = () => this.shoot()
         this.bombListener = () => this.handleBombButton()
-        document.addEventListener("joystick0button0", this.fireListener)
-        document.addEventListener("joystick0button1", this.bombListener)
+        // all buttonEvents (like "joystick0button0" for the first button) 
+        // are stored in the array ButtonEvents
+        if(this.joystick) {
+            document.addEventListener(this.joystick.ButtonEvents[0], this.fireListener) 
+            document.addEventListener(this.joystick.ButtonEvents[1], this.bombListener)
+        }
+
+        this.fireKey = this.scene.input.keyboard.addKey('CTRL')
+        this.scene.input.keyboard.on('keydown_SPACE', this.fireListener)
+        // this.scene.input.keyboard.on('CTRL'         , this.bombListener)
+        
+
+        this.ui = new UI(this.scene, this, this.player.Number ? true : false)
+        this.tint = this.player.Color
     }
 
     private addPhysics(){
@@ -40,18 +91,22 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
         // slow down
         this.body.velocity.scale(0.99)
         // input
-        this.joystickInput()
+        if(this.joystick) this.joystickInput()
         this.keyboardInput()
 
         // als gameover
-        if (this.scene.registry.values.life <= 0) {
+        if (this.Life <= 0) {
             this.gameOver()
         }
+
+        this.ui.update()
     }
 
     private gameOver(){
-        document.removeEventListener("joystick0button0", this.fireListener)
-        document.removeEventListener("joystick0button1", this.bombListener)
+        if(this.joystick) {
+            document.removeEventListener(this.joystick.ButtonEvents[0], this.fireListener)
+            document.removeEventListener(this.joystick.ButtonEvents[1], this.bombListener)
+        }
         this.scene.scene.start('GameOver')
     }
 
@@ -74,21 +129,19 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
     }
 
     private joystickInput():void {
-        for (let joystick of this.arcade.Joysticks) {
-            joystick.update()
-        }
-        if (this.arcade.Joysticks[0]) {
-            this.setVelocityX(this.arcade.Joysticks[0].X * 400)
-            this.setVelocityY(this.arcade.Joysticks[0].Y * 400)
-        }
+        this.setVelocityX(this.joystick.X * 400)
+        this.setVelocityY(this.joystick.Y * 400)
     }
 
-    private handleFireButton():void {
-        this.gameScene.friendlyBullet()
+    private shoot() : void {
+        this.bulletGroup.add(new Bullet(this.scene, this.x+20, this.y, this), true)
     }
 
     private handleBombButton():void {
-        this.gameScene.dropBomb()
+        if(Ship.HasBombs()) {
+            Ship.DecreaseBomb();
+            (this.scene as GameScene).dropBomb() 
+        }
     }
 
     private keyboardInput(): void {
@@ -108,14 +161,25 @@ export class Ship extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityY(350)
         }
 
+        if(this.scene.input.keyboard.checkDown(this.fireKey, 500)) {
+            this.handleBombButton()
+        }
         // shoot continuously
         //if(this.cursors.space.isDown) {
         //    console.log("pew pew")
         //}
 
         // cooldown 500 msecs before firing again!
-        if(this.scene.input.keyboard.checkDown(this.cursors.space, 500)){
-            this.gameScene.friendlyBullet()
-        }
+        // if(this.scene.input.keyboard.checkDown(this.cursors.space, 500)){
+        //     this.shoot()
+        //     // this.gameScene.friendlyBullet()
+        //     console.log("hier?")
+        // }
+
+        // if(this.scene.input.keyboard.checkDown(
+        //     this.scene.input.keyboard.keys[Phaser.Input.Keyboard.KeyCodes.CTRL ], 500)){
+        //     this.shoot()
+        //     // this.gameScene.friendlyBullet()
+        // }
     }
 }

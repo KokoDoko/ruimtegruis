@@ -1,9 +1,9 @@
 export class BootScene extends Phaser.Scene {
 
-    private graphics: Phaser.GameObjects.Graphics
-    private progressbar: Phaser.Geom.Rectangle
-    private bFontsLoaded : boolean = false
-    private bAssetsLoaded : boolean = false
+    private graphics        : Phaser.GameObjects.Graphics
+    private progressbar     : Phaser.Geom.Rectangle
+    private bFontsLoaded    : boolean = false
+    private bAssetsLoaded   : boolean = false
 
     constructor() {
         super({key: "BootScene"})
@@ -22,18 +22,18 @@ export class BootScene extends Phaser.Scene {
     }
 
     preload(): void {
-        this.load.image('loading', require("../assets/loading.png"))
-        this.load.image('demo', require("../assets/ruimtegruis.png"))
-        this.load.image('title', require("../assets/gruis_title.png"))
-        this.load.image('ship', require("../assets/ship.png"))
-        this.load.image('bomb', require("../assets/bomb.png"))
-        this.load.image('rock', require('../assets/block3.png'))
-        this.load.image('bg', require('../assets/background.png'))
-        this.load.image('enemy', require('../assets/enemy_red.png'))
-        this.load.image('bullet', require('../assets/bullet_grey.png'))
-        this.load.image('explosion', require('../assets/explosion.png'))
-        this.load.image('pixel', require('../assets/pixel.png'))
-        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js')
+        this.load.image('loading',      require("../assets/loading.png"))
+        this.load.image('demo',         require("../assets/ruimtegruis.png"))
+        this.load.image('title',        require("../assets/gruis_title.png"))
+        this.load.image('ship',         require("../assets/ship.png"))
+        this.load.image('bomb',         require("../assets/bomb.png"))
+        this.load.image('rock',         require('../assets/block3.png'))
+        this.load.image('bg',           require('../assets/background.png'))
+        this.load.image('enemy',        require('../assets/enemy_red.png'))
+        this.load.image('bullet',       require('../assets/bullet_grey.png'))
+        this.load.image('explosion',    require('../assets/explosion.png'))
+        this.load.image('pixel',        require('../assets/pixel.png'))
+        this.load.script('webfont',     'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js')
     }
 
     create(): void {

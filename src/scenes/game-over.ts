@@ -1,11 +1,11 @@
-import { Arcade } from "../utils/arcade"
-import { RuimteGruis } from "../game"
+import { RuimteGruis }  from "../game"
+import { Player }       from "../player";
+import { Ship } from "../objects/ship";
 
 export class GameOver extends Phaser.Scene {
 
     private bgtile: Phaser.GameObjects.TileSprite
     private cursors: Phaser.Input.Keyboard.CursorKeys
-    private arcade: Arcade
     private nextGameListener: EventListener
 
     constructor() {
@@ -19,27 +19,42 @@ export class GameOver extends Phaser.Scene {
     }
     
     create(): void {
-        let g = this.game as RuimteGruis
-        this.arcade = g.arcade
+        let game = this.game as RuimteGruis
+        
         this.cursors = this.input.keyboard.createCursorKeys()
         
         this.bgtile = this.add.tileSprite(0, 0, 1000, 625, 'bg').setOrigin(0, 0)
 
-        let w = Number(this.game.config.width)
-        let hiscore = Number(localStorage.getItem('hiscore'))
-        let scoreText = 'Score: ' + this.registry.values.score
+        let w       = Number(this.game.config.width)
+        let hiscore = this.checkHighScore()
 
         this.add.text(w - 10, 30, 'Hiscore: ' + hiscore, { fontFamily: '"Press Start 2P"', fontSize: 18, color: '#FFF' }).setOrigin(1, 0.5)
 
-        if (this.registry.values.score > hiscore) {
-            localStorage.setItem('hiscore', String(this.registry.values.score))
-            scoreText += " -- A NEW HISCORE!"
+        // Player results
+        let position    = this.registry.values.mode ? w / 2 - 200 : w / 2
+        
+        let playerResults : Phaser.GameObjects.Text[] = []
+        let highscoreText : Phaser.GameObjects.Text
+
+        for (const player of game.Players) {
+            // convert dec (0xFF0000) to hex
+            let color : string = "#"+player.Color.toString(16).padStart(6, "0")
+            playerResults.push(
+                this.add.text(position + player.Number * 400, -100, 
+                    'Score: ' + player.Score, 
+                    { fontFamily: '"Press Start 2P"', fontSize: 28, color:  color }).setOrigin(0.5)
+            )
+            if(player.Score === hiscore) {
+                console.log("HIGHSCORE")
+                highscoreText = this.add.text(position + player.Number * 400, -100, 
+                    'A NEW HISCORE!', 
+                    { fontFamily: '"Press Start 2P"', fontSize: 28, color:  "#FFF" }).setOrigin(0.5)
+            }
         }
 
         let title: Phaser.GameObjects.Image = this.add.image(500, 100, 'title').setScale(0.5)
 
         let t1 : Phaser.GameObjects.Text = this.add.text(w/2, -100, 'GAME OVER', { fontFamily: '"Press Start 2P"', fontSize: 70, color: '#FFF' }).setOrigin(0.5)
-        let t2 : Phaser.GameObjects.Text = this.add.text(w/2, -100, scoreText, { fontFamily: '"Press Start 2P"', fontSize: 28, color: '#FFF' }).setOrigin(0.5)
         let t3: Phaser.GameObjects.Text = this.add.text(w / 2, 520, 'PRESS FIRE TO PLAY AGAIN ', { fontFamily: '"Press Start 2P"', fontSize: 22, color: 'rgb(221,48,212)' }).setOrigin(0.5)
 
         this.tweens.add({
@@ -52,12 +67,20 @@ export class GameOver extends Phaser.Scene {
         })
 
         this.tweens.add({
-            targets: t2,
+            targets: playerResults,
             y: 320,
             duration: 1600,
             ease: 'Back',
             easeParams: [3.5],
             delay: 400
+        })
+        this.tweens.add({
+            targets: highscoreText,
+            y: 380,
+            duration: 1600,
+            ease: 'Back',
+            easeParams: [3.5],
+            delay: 100
         })
         this.tweens.add({
             targets: t3,
@@ -75,15 +98,18 @@ export class GameOver extends Phaser.Scene {
 
         // joystick fire button
         this.nextGameListener = () => this.nextGame()
-        document.addEventListener("joystick0button0", this.nextGameListener)
+        // document.addEventListener("joystick0button0", this.nextGameListener)
+        for (const joystick of game.Arcade.Joysticks) {
+            document.addEventListener(joystick.ButtonEvents[0], this.nextGameListener)
+        }
     }
+    
 
     public update(): void {
-        this.bgtile.tilePositionX += 4
+        this.bgtile.tilePositionX += 4;
 
-        for (let joystick of this.arcade.Joysticks) {
-            joystick.update()
-        }
+        // update all joysticks
+        (this.game as RuimteGruis).Arcade.Joysticks.forEach(j => j.update())
 
         if (this.cursors.space.isDown) {
             this.nextGame()
@@ -91,12 +117,34 @@ export class GameOver extends Phaser.Scene {
     }
 
     private nextGame(){
-        document.removeEventListener("joystick0button0", this.nextGameListener)
+        let game = this.game as RuimteGruis
+        
+        game.Players = []
+        Ship.Bombs = 2
+        
+        this.registry.set("mode", -1)
+        
+        for (const joystick of game.Arcade.Joysticks) {
+            document.removeEventListener(joystick.ButtonEvents[0], this.nextGameListener)
+        }
+        // document.removeEventListener("joystick0button0", this.nextGameListener)
+        this.scene.start('ModeScene')
+    }
 
-        this.registry.set("score", 0)
-        this.registry.set("bombs", 3)
-        this.registry.set("life", 300)
+    private checkHighScore() : number {
+        let highscore = Number(localStorage.getItem('hiscore'))
+        let game = this.game as RuimteGruis
+        let highestScore = 0
 
-        this.scene.start('GameScene')
+        game.Players.forEach(p => {
+            if(p.Score > highestScore) highestScore = p.Score
+        })
+
+        if(highestScore > highscore) {
+            localStorage.setItem('hiscore', String(highestScore))
+            return highestScore
+        } else {
+            return highscore
+        }
     }
 }
