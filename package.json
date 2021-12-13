@@ -24,6 +24,6 @@
     "typescript": "^3.4.5"
   },
   "devDependencies": {
-    "cssnano": "^4.1.10"
+    "cssnano": "^5.0.12"
   }
 }
