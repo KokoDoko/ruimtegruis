@@ -1,0 +1,13 @@
+body {
+    background-color:black;
+    margin:0; padding:0;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#game {
+    cursor: none;
+}
+
+
+/*# sourceMappingURL=/style.e308ff8e.css.map */
