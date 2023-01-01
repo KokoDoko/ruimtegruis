@@ -20,7 +20,7 @@
     "@types/node": "^11.13.8",
     "@types/webpack-env": "^1.13.9",
     "colors.css": "^3.0.0",
-    "phaser": "^3.18.1",
+    "phaser": "^3.55.2",
     "typescript": "^3.4.5"
   },
   "devDependencies": {
